@@ -1,0 +1,49 @@
+Answer for question 2
+
+1.
+UPDATE employee_job_table AS j
+JOIN employee_profile_table AS p 
+ON p.employee_id = j.employee_id
+SET 
+    j.job_id = 4, 
+    j.effective_date = '2020-01-01'
+WHERE p.employee_no = 1002;
+
+2.
+SELECT 
+    p.employee_name,
+    p.employee_no,
+    j.effective_date,
+    jp.job_name AS job_title
+FROM employee_profile_table AS p
+JOIN employee_job_table AS j 
+ON p.employee_id = j.employee_id
+JOIN job_profile_table AS jp 
+ON j.job_id = jp.job_id
+
+3.
+SELECT 
+    p.employee_name,
+    p.employee_no,
+    jp.job_name AS latest_job_title,
+    j.effective_date
+FROM employee_profile_table AS p
+JOIN employee_job_table AS j 
+ON p.employee_id = j.employee_id
+JOIN job_profile_table AS jp 
+ON j.job_id = jp.job_id
+JOIN (
+    SELECT 
+        employee_id,
+        MAX(effective_date) AS max_date
+    FROM employee_job_table
+    GROUP BY employee_id
+) AS a
+    ON a.employee_id = j.employee_id AND a.max_date = j.effective_date;
+
+4.
+DELETE j
+FROM employee_job_table AS j
+JOIN employee_profile_table AS p
+ON j.employee_id = p.employee_id
+WHERE p.employee_no = 1000 AND j.effective_date = '2020-01-01';
